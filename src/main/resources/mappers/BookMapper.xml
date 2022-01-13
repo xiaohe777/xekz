@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xekz.mapper.BookMapper">
+    <resultMap id="BaseResultMap" type="com.xekz.bean.Book">
+        <id column="book_id" property="bookId" jdbcType="INTEGER"/>
+        <result column="customer_realname" property="customerRealname" jdbcType="VARCHAR"/>
+        <result column="book_time" property="bookTime" jdbcType="INTEGER"/>
+        <result column="book_price" property="bookPrice" jdbcType="DECIMAL"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    book_id, customer_realname, book_time, book_price
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_book
+        where book_id = #{bookId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_book
+    where book_id = #{bookId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.xekz.bean.Book">
+    insert into t_book (book_id, customer_realname, book_time, 
+      book_price)
+    values (#{bookId,jdbcType=INTEGER}, #{customerRealname,jdbcType=VARCHAR}, #{bookTime,jdbcType=INTEGER}, 
+      #{bookPrice,jdbcType=DECIMAL})
+  </insert>
+    <insert id="insertSelective" parameterType="com.xekz.bean.Book">
+        insert into t_book
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bookId != null">
+                book_id,
+            </if>
+            <if test="customerRealname != null">
+                customer_realname,
+            </if>
+            <if test="bookTime != null">
+                book_time,
+            </if>
+            <if test="bookPrice != null">
+                book_price,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bookId != null">
+                #{bookId,jdbcType=INTEGER},
+            </if>
+            <if test="customerRealname != null">
+                #{customerRealname,jdbcType=VARCHAR},
+            </if>
+            <if test="bookTime != null">
+                #{bookTime,jdbcType=INTEGER},
+            </if>
+            <if test="bookPrice != null">
+                #{bookPrice,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xekz.bean.Book">
+        update t_book
+        <set>
+            <if test="customerRealname != null">
+                customer_realname = #{customerRealname,jdbcType=VARCHAR},
+            </if>
+            <if test="bookTime != null">
+                book_time = #{bookTime,jdbcType=INTEGER},
+            </if>
+            <if test="bookPrice != null">
+                book_price = #{bookPrice,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where book_id = #{bookId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xekz.bean.Book">
+    update t_book
+    set customer_realname = #{customerRealname,jdbcType=VARCHAR},
+      book_time = #{bookTime,jdbcType=INTEGER},
+      book_price = #{bookPrice,jdbcType=DECIMAL}
+    where book_id = #{bookId,jdbcType=INTEGER}
+  </update>
+
+
+    <select id="selectBookById" resultType="com.xekz.bean.Book">
+        select * from t_book
+        <where>
+            <if test="bookId!=null and bookId!=''">
+                book_id=#{bookId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAll" resultType="com.xekz.bean.CaterBook">
+        select * from t_caterbook
+    </select>
+
+    <delete id="deleteBatch">
+        delete from t_caterbook where book_id in (
+        <foreach collection="array" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+    </delete>
+
+</mapper>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xekz.mapper.RoomMapper" >
+  <resultMap id="BaseResultMap" type="com.xekz.bean.Room" >
+    <id column="room_id" property="roomId" jdbcType="INTEGER" />
+    <result column="room_type" property="roomType" jdbcType="VARCHAR" />
+    <result column="room_area" property="roomArea" jdbcType="VARCHAR" />
+    <result column="room_introduction" property="roomIntroduction" jdbcType="VARCHAR" />
+    <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
+    <result column="room_price" property="roomPrice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    room_id, room_type, room_area, room_introduction, room_image, room_price
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_room
+    where room_id = #{roomId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_room
+    where room_id = #{roomId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xekz.bean.Room" >
+    insert into t_room (room_id, room_type, room_area, 
+      room_introduction, room_image, room_price
+      )
+    values (#{roomId,jdbcType=INTEGER}, #{roomType,jdbcType=VARCHAR}, #{roomArea,jdbcType=VARCHAR}, 
+      #{roomIntroduction,jdbcType=VARCHAR}, #{roomImage,jdbcType=VARCHAR}, #{roomPrice,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xekz.bean.Room" >
+    insert into t_room
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roomId != null" >
+        room_id,
+      </if>
+      <if test="roomType != null" >
+        room_type,
+      </if>
+      <if test="roomArea != null" >
+        room_area,
+      </if>
+      <if test="roomIntroduction != null" >
+        room_introduction,
+      </if>
+      <if test="roomImage != null" >
+        room_image,
+      </if>
+      <if test="roomPrice != null" >
+        room_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roomId != null" >
+        #{roomId,jdbcType=INTEGER},
+      </if>
+      <if test="roomType != null" >
+        #{roomType,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null" >
+        #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="roomIntroduction != null" >
+        #{roomIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="roomImage != null" >
+        #{roomImage,jdbcType=VARCHAR},
+      </if>
+      <if test="roomPrice != null" >
+        #{roomPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xekz.bean.Room" >
+    update t_room
+    <set >
+      <if test="roomType != null" >
+        room_type = #{roomType,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null" >
+        room_area = #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="roomIntroduction != null" >
+        room_introduction = #{roomIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="roomImage != null" >
+        room_image = #{roomImage,jdbcType=VARCHAR},
+      </if>
+      <if test="roomPrice != null" >
+        room_price = #{roomPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where room_id = #{roomId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xekz.bean.Room" >
+    update t_room
+    set room_type = #{roomType,jdbcType=VARCHAR},
+      room_area = #{roomArea,jdbcType=VARCHAR},
+      room_introduction = #{roomIntroduction,jdbcType=VARCHAR},
+      room_image = #{roomImage,jdbcType=VARCHAR},
+      room_price = #{roomPrice,jdbcType=DECIMAL}
+    where room_id = #{roomId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xekz.mapper.OrderMapper">
+    <resultMap id="BaseResultMap" type="com.xekz.bean.Order">
+        <id column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="room_id" property="roomId" jdbcType="INTEGER"/>
+        <result column="entry_date" property="entryDate" jdbcType="DATE"/>
+        <result column="departure_date" property="departureDate" jdbcType="DATE"/>
+        <result column="order_tel" property="orderTel" jdbcType="VARCHAR"/>
+        <result column="order_date" property="orderDate" jdbcType="TIMESTAMP"/>
+        <result column="order_price" property="orderPrice" jdbcType="DECIMAL"/>
+        <result column="room_type" property="roomType" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    order_id, user_id, room_id, entry_date, departure_date, order_tel, order_date, order_price, 
+    room_type
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.xekz.bean.Order">
+    insert into t_order (order_id, user_id, room_id, 
+      entry_date, departure_date, order_tel, 
+      order_date, order_price, room_type
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{roomId,jdbcType=INTEGER}, 
+      #{entryDate,jdbcType=DATE}, #{departureDate,jdbcType=DATE}, #{orderTel,jdbcType=VARCHAR}, 
+      #{orderDate,jdbcType=TIMESTAMP}, #{orderPrice,jdbcType=DECIMAL}, #{roomType,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.xekz.bean.Order">
+        insert into t_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="roomId != null">
+                room_id,
+            </if>
+            <if test="entryDate != null">
+                entry_date,
+            </if>
+            <if test="departureDate != null">
+                departure_date,
+            </if>
+            <if test="orderTel != null">
+                order_tel,
+            </if>
+            <if test="orderDate != null">
+                order_date,
+            </if>
+            <if test="orderPrice != null">
+                order_price,
+            </if>
+            <if test="roomType != null">
+                room_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="roomId != null">
+                #{roomId,jdbcType=INTEGER},
+            </if>
+            <if test="entryDate != null">
+                #{entryDate,jdbcType=DATE},
+            </if>
+            <if test="departureDate != null">
+                #{departureDate,jdbcType=DATE},
+            </if>
+            <if test="orderTel != null">
+                #{orderTel,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDate != null">
+                #{orderDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderPrice != null">
+                #{orderPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="roomType != null">
+                #{roomType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xekz.bean.Order">
+        update t_order
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="roomId != null">
+                room_id = #{roomId,jdbcType=INTEGER},
+            </if>
+            <if test="entryDate != null">
+                entry_date = #{entryDate,jdbcType=DATE},
+            </if>
+            <if test="departureDate != null">
+                departure_date = #{departureDate,jdbcType=DATE},
+            </if>
+            <if test="orderTel != null">
+                order_tel = #{orderTel,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDate != null">
+                order_date = #{orderDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderPrice != null">
+                order_price = #{orderPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="roomType != null">
+                room_type = #{roomType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xekz.bean.Order">
+    update t_order
+    set user_id = #{userId,jdbcType=INTEGER},
+      room_id = #{roomId,jdbcType=INTEGER},
+      entry_date = #{entryDate,jdbcType=DATE},
+      departure_date = #{departureDate,jdbcType=DATE},
+      order_tel = #{orderTel,jdbcType=VARCHAR},
+      order_date = #{orderDate,jdbcType=TIMESTAMP},
+      order_price = #{orderPrice,jdbcType=DECIMAL},
+      room_type = #{roomType,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+    <!--查询所有订单-->
+    <select id="selectOrder" resultType="java.util.Map">
+    select * from t_order
+  </select>
+    <!--根据入住日期查询空房间Id-->
+    <select id="selectRoomByDate" parameterType="com.xekz.query.OrderQuery" resultType="com.xekz.bean.Room">
+    select * from t_room where room_id
+        not in
+    (select room_id from t_order where entry_date = #{entryDate})
+</select>
+    <select id="selectCusByUserId" resultType="java.lang.Object">
+      select customer_realname from t_customer where user_id=#{userId}
+    </select>
+    <select id="selectOrderByUserId" resultType="com.xekz.bean.Order">
+      select * from t_order where user_id=#{userId}
+    </select>
+    <select id="selectByRoomId" resultType="com.xekz.bean.Room">
+      select * from t_room where room_id=#{roomId}
+    </select>
+
+
+</mapper>

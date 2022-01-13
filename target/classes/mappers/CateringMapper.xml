@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xekz.mapper.CateringMapper" >
+  <resultMap id="BaseResultMap" type="com.xekz.bean.Catering" >
+    <id column="catering_id" property="cateringId" jdbcType="INTEGER" />
+    <result column="catering_name" property="cateringName" jdbcType="VARCHAR" />
+    <result column="catering_price" property="cateringPrice" jdbcType="DECIMAL" />
+    <result column="catering_introduction" property="cateringIntroduction" jdbcType="VARCHAR" />
+    <result column="catering_image" property="cateringImage" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    catering_id, catering_name, catering_price, catering_introduction, catering_image
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_catering
+    where catering_id = #{cateringId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_catering
+    where catering_id = #{cateringId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xekz.bean.Catering" >
+    insert into t_catering (catering_id, catering_name, catering_price, 
+      catering_introduction, catering_image)
+    values (#{cateringId,jdbcType=INTEGER}, #{cateringName,jdbcType=VARCHAR}, #{cateringPrice,jdbcType=DECIMAL}, 
+      #{cateringIntroduction,jdbcType=VARCHAR}, #{cateringImage,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xekz.bean.Catering" >
+    insert into t_catering
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cateringId != null" >
+        catering_id,
+      </if>
+      <if test="cateringName != null" >
+        catering_name,
+      </if>
+      <if test="cateringPrice != null" >
+        catering_price,
+      </if>
+      <if test="cateringIntroduction != null" >
+        catering_introduction,
+      </if>
+      <if test="cateringImage != null" >
+        catering_image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cateringId != null" >
+        #{cateringId,jdbcType=INTEGER},
+      </if>
+      <if test="cateringName != null" >
+        #{cateringName,jdbcType=VARCHAR},
+      </if>
+      <if test="cateringPrice != null" >
+        #{cateringPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="cateringIntroduction != null" >
+        #{cateringIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="cateringImage != null" >
+        #{cateringImage,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xekz.bean.Catering" >
+    update t_catering
+    <set >
+      <if test="cateringName != null" >
+        catering_name = #{cateringName,jdbcType=VARCHAR},
+      </if>
+      <if test="cateringPrice != null" >
+        catering_price = #{cateringPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="cateringIntroduction != null" >
+        catering_introduction = #{cateringIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="cateringImage != null" >
+        catering_image = #{cateringImage,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where catering_id = #{cateringId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xekz.bean.Catering" >
+    update t_catering
+    set catering_name = #{cateringName,jdbcType=VARCHAR},
+      catering_price = #{cateringPrice,jdbcType=DECIMAL},
+      catering_introduction = #{cateringIntroduction,jdbcType=VARCHAR},
+      catering_image = #{cateringImage,jdbcType=VARCHAR}
+    where catering_id = #{cateringId,jdbcType=INTEGER}
+  </update>
+<!--查询所有菜单-->
+  <select id="selectCater" resultType="java.util.Map">
+    select catering_name,catering_id from t_catering
+  </select>
+
+
+</mapper>
